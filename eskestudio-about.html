@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>about — eske studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================
+       CSS VARIABLES — consistent across all pages
+       ============================================= */
+    :root {
+      --color-bg: #FAFAF7;
+      --color-text: #1A1A1A;
+      --color-text-light: #6B6B6B;
+      --color-accent: #C4510A;
+      --color-border: #E8E5DF;
+      --color-card-bg: #FFFFFF;
+      --color-tag-bg: #F0EDE8;
+
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --max-width: 1200px;
+    }
+
+    /* =============================================
+       RESET & BASE
+       ============================================= */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =============================================
+       NAVIGATION — same across all pages
+       ============================================= */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--color-text-light);
+      letter-spacing: 0.02em;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-text);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+      background: var(--color-accent);
+    }
+
+    /* =============================================
+       ABOUT SECTION
+       
+       Two-column layout: bio text on the left,
+       a warm accent block on the right with quick
+       facts. This breaks up what would otherwise be
+       a wall of text, and gives recruiters scannable
+       info at a glance.
+       ============================================= */
+    .about-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 128px 32px 0;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-bio {
+      padding-right: 16px;
+    }
+
+    .about-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .about-text {
+      font-size: 1rem;
+      color: var(--color-text);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .about-text strong {
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .about-divider {
+      width: 48px;
+      height: 1px;
+      background: var(--color-accent);
+      margin: 32px 0;
+    }
+
+    /* =============================================
+       QUICK FACTS SIDEBAR
+       
+       A small card with at-a-glance details.
+       Recruiters scan — this gives them what they
+       need in 5 seconds without reading the full bio.
+       ============================================= */
+    .about-sidebar {
+      position: sticky;
+      top: 96px; /* sits below the fixed nav */
+    }
+
+    .sidebar-card {
+      background: var(--color-card-bg);
+      border-radius: 8px;
+      padding: 32px;
+      border: 1px solid var(--color-border);
+    }
+
+    .sidebar-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-item {
+      margin-bottom: 20px;
+    }
+
+    .sidebar-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .sidebar-item-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-light);
+      margin-bottom: 4px;
+    }
+
+    .sidebar-item-value {
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .sidebar-item-value a {
+      color: var(--color-accent);
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar-item-value a:hover {
+      opacity: 0.7;
+    }
+
+    /* =============================================
+       CONTACT SECTION
+       
+       Simple form: name, email, message, send button.
+       In WordPress, this would be powered by a plugin
+       like WPForms or Contact Form 7. The theme just
+       provides the visual styling — the plugin handles
+       actually sending the email.
+       
+       For the static prototype, the form doesn't
+       submit anywhere. It's just the design.
+       ============================================= */
+    .contact-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+
+    .contact-header {
+      margin-bottom: 40px;
+    }
+
+    .contact-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .contact-subtitle {
+      font-size: 1rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+    }
+
+    .contact-form {
+      max-width: 640px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group-full {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-light);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--color-text);
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(196, 81, 10, 0.08);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--color-border);
+      font-weight: 300;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 160px;
+    }
+
+    .form-submit {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 16px 48px;
+      background: var(--color-text);
+      color: var(--color-bg);
+      border: 1px solid var(--color-text);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+
+    .form-submit:hover {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+
+    /* =============================================
+       FOOTER — same across all pages
+       ============================================= */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      padding: 40px 32px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-text);
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 900px) {
+      .about-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-sidebar {
+        position: static;
+      }
+
+      .about-bio {
+        padding-right: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .about-section {
+        padding: 108px 20px 0;
+      }
+
+      .contact-section {
+        padding: 60px 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-inner {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+
+      .nav-links a {
+        font-size: 0.78rem;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    /* =============================================
+       ANIMATIONS
+       ============================================= */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .about-title {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.1s forwards;
+    }
+
+    .about-text {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+
+    .about-text:nth-of-type(2) {
+      animation-delay: 0.28s;
+    }
+
+    .about-text:nth-of-type(3) {
+      animation-delay: 0.36s;
+    }
+
+    .about-divider {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+
+    .sidebar-card {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.35s forwards;
+    }
+
+    /* Scroll-triggered for contact section */
+    .contact-section {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .contact-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">eske studio</a>
+      <ul class="nav-links">
+        <li><a href="/portfolio">portfolio</a></li>
+        <li><a href="/category/vancouver">vancouver</a></li>
+        <li><a href="/category/escapes">escapes</a></li>
+        <li><a href="/category/journal">journal</a></li>
+        <li><a href="/about" class="active">about</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================================= 
+       ABOUT SECTION
+       
+       Bio on the left, quick facts sidebar on the right.
+       
+       NOTE TO ANNIE: This bio text is a draft for you
+       to edit. I've written it in your voice based on 
+       what I know, but you should make it fully yours.
+       Read it out loud — if anything sounds unlike you,
+       change it.
+       ============================================= -->
+  <section class="about-section">
+
+    <div class="about-bio">
+      <h1 class="about-title">About</h1>
+
+      <p class="about-text">
+        I'm Annie, a marketing and design specialist based in Metro Vancouver. 
+        I work across brand identity, content strategy, social media, and 
+        communications design — with a focus on making complex information 
+        clear and accessible for diverse audiences.
+      </p>
+
+      <p class="about-text">
+        My professional background spans healthcare diagnostics, natural pet 
+        products, and environmental stewardship, where I've led SEO-driven 
+        blog campaigns, LinkedIn strategy, email marketing, internal 
+        communications, and conference presentation design. I studied 
+        Interactive Arts and Technology at Simon Fraser University, which 
+        gave me a foundation that sits right at the intersection of design 
+        thinking and technical execution.
+      </p>
+
+      <div class="about-divider"></div>
+
+      <p class="about-text">
+        Eske Studio is my personal space, part journal, part portfolio, part 
+        love letter to the places I've been and the food I've found along the way. 
+        When I'm not designing or writing, I'm probably exploring a new 
+        restaurant or planning the next trip somewhere I've never been.
+      </p>
+    </div>
+
+    <!-- SIDEBAR: scannable facts for recruiters -->
+    <aside class="about-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-label">At a glance</div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-item-label">Based in</div>
+          <div class="sidebar-item-value">Surrey, BC, Canada</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-item-label">Focus</div>
+          <div class="sidebar-item-value">Marketing, design, content strategy, communications</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-item-label">Education</div>
+          <div class="sidebar-item-value">Interactive Arts + Technology, SFU</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-item-label">Tools</div>
+          <div class="sidebar-item-value">Adobe Creative Suite, Figma, WordPress, Mailchimp, HTML/CSS, CapCut</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-item-label">Connect</div>
+          <div class="sidebar-item-value">
+            <a href="https://www.linkedin.com/in/annienn/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </section>
+
+  <!-- ============================================= 
+       CONTACT SECTION
+       
+       Simple form. In WordPress, you'd install a plugin 
+       like WPForms (free version works fine) or Contact 
+       Form 7, and use a shortcode here instead of raw 
+       HTML form elements. The plugin handles sending 
+       the email to you, spam protection, etc.
+       
+       For this prototype, the form is visual only.
+       ============================================= -->
+  <section class="contact-section">
+    <div class="contact-header">
+      <h2 class="contact-title">Get in touch</h2>
+      <p class="contact-subtitle">Have a question, a project idea, or just want to say hello? I'd love to hear from you.</p>
+    </div>
+
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input type="text" id="name" class="form-input" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" id="email" class="form-input" placeholder="your@email.com">
+        </div>
+      </div>
+
+      <div class="form-group form-group-full">
+        <label class="form-label" for="message">Message</label>
+        <textarea id="message" class="form-textarea" placeholder="What's on your mind?"></textarea>
+      </div>
+
+      <button type="button" class="form-submit">Send message</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">&copy; 2026 eske studio</div>
+      <ul class="footer-links">
+        <li><a href="/about">about & contact</a></li>
+        <li><a href="https://etsy.com/shop/EskeStudioCo" target="_blank" rel="noopener">shop</a></li>
+        <li><a href="https://instagram.com" target="_blank" rel="noopener">instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- SCROLL-TRIGGERED ANIMATIONS -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    document.querySelectorAll('.contact-section').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
