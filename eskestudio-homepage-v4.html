@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eske studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================
+       CSS VARIABLES
+       ============================================= */
+    :root {
+      --color-bg: #FAFAF7;
+      --color-text: #1A1A1A;
+      --color-text-light: #6B6B6B;
+      --color-accent: #C4510A;
+      --color-border: #E8E5DF;
+      --color-card-bg: #FFFFFF;
+      --color-tag-bg: #F0EDE8;
+
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --max-width: 1200px;
+      --grid-gap: 24px;
+    }
+
+    /* =============================================
+       RESET & BASE
+       ============================================= */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* =============================================
+       NAVIGATION
+       ============================================= */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--color-text-light);
+      letter-spacing: 0.02em;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-text);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+      background: var(--color-accent);
+    }
+
+    /* =============================================
+       HERO — v4
+       Tagline + pulsing scroll line (no horizontal
+       divider this time — the line stands on its own).
+       Enough vertical space for the hero to breathe
+       but compact enough that the grid peeks in.
+       ============================================= */
+    .hero {
+      padding: 128px 32px 48px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: lowercase;
+    }
+
+    /* 
+      SCROLL INDICATOR — v4
+      The pulsing line is back, but without the horizontal 
+      divider above it. Now it reads as a standalone 
+      animated accent — a gentle visual pulse that adds 
+      life to the hero without competing with anything.
+    */
+    .hero-scroll-line {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(to bottom, var(--color-accent), transparent);
+      margin: 24px auto 0;
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% {
+        opacity: 0.25;
+        transform: scaleY(0.5);
+        transform-origin: top;
+      }
+      50% {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+    }
+
+    /* =============================================
+       SECTION HEADER
+       ============================================= */
+    .section-header {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 32px 24px;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-light);
+    }
+
+    /* =============================================
+       POST GRID
+       ============================================= */
+    .post-grid {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 32px 80px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--grid-gap);
+    }
+
+    .post-card {
+      background: var(--color-card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .post-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .post-card-image {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: var(--color-tag-bg);
+      position: relative;
+    }
+
+    .post-card-image img {
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .post-card:hover .post-card-image img {
+      transform: scale(1.05);
+    }
+
+    .post-card-image::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(26,26,26,0.12), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .post-card:hover .post-card-image::after {
+      opacity: 1;
+    }
+
+    .post-card-body {
+      padding: 20px;
+    }
+
+    .post-card-category {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .post-card-category::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-accent);
+      transition: width 0.3s ease;
+    }
+
+    .post-card:hover .post-card-category::after {
+      width: 100%;
+    }
+
+    .post-card-title {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      line-height: 1.35;
+      margin-bottom: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .post-card:hover .post-card-title {
+      color: var(--color-accent);
+    }
+
+    .post-card-date {
+      font-size: 0.78rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    /* =============================================
+       LOAD MORE
+       ============================================= */
+    .load-more-wrapper {
+      text-align: center;
+      padding: 0 32px 80px;
+    }
+
+    .load-more-btn {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 14px 40px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      cursor: pointer;
+      color: var(--color-text);
+      transition: all 0.3s ease;
+    }
+
+    .load-more-btn:hover {
+      border-color: var(--color-text);
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
+
+    /* =============================================
+       FOOTER
+       ============================================= */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      padding: 40px 32px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-text);
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 900px) {
+      .post-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .post-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px 60px;
+      }
+
+      .hero {
+        padding: 108px 20px 36px;
+      }
+
+      .nav-inner {
+        padding: 0 20px;
+      }
+
+      .section-header {
+        padding: 0 20px 20px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+
+      .nav-links a {
+        font-size: 0.78rem;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    /* =============================================
+       ANIMATIONS
+       ============================================= */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-tagline {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.1s forwards;
+    }
+
+    .hero-scroll-line {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+
+    /* Scroll-triggered card animations */
+    .post-card {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .post-card.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .post-card:nth-child(3n+2) {
+      transition-delay: 0.08s;
+    }
+    .post-card:nth-child(3n+3) {
+      transition-delay: 0.16s;
+    }
+
+    .section-header {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .section-header.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">eske studio</a>
+      <ul class="nav-links">
+        <li><a href="/portfolio">portfolio</a></li>
+        <li><a href="/category/vancouver">vancouver</a></li>
+        <li><a href="/category/escapes">escapes</a></li>
+        <li><a href="/category/journal">journal</a></li>
+        <li><a href="/about">about</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================================= 
+       HERO — v4
+       Tagline + pulsing scroll line (no horizontal 
+       divider). Clean, alive, no repetition.
+       ============================================= -->
+  <section class="hero">
+    <p class="hero-tagline">stories, places, work</p>
+    <div class="hero-scroll-line"></div>
+  </section>
+
+  <!-- SECTION HEADER -->
+  <div class="section-header">
+    <span class="section-label">Recent posts</span>
+  </div>
+
+  <!-- =============================================
+       POST GRID — Now featuring Escapes content
+       
+       Homepage showcases your most compelling content 
+       (travel stories) for a stronger first impression.
+       Vancouver posts still exist and are accessible 
+       from the nav — they just don't lead the homepage.
+       
+       In WordPress, you'd use a custom query to pull
+       posts from specific categories or use sticky/
+       featured posts to control what appears here.
+       ============================================= -->
+  <div class="post-grid">
+
+    <!-- Post 1: Kashmir -->
+    <article class="post-card">
+      <div class="post-card-image">
+        <img src="https://i0.wp.com/eskestudio.blog/wp-content/uploads/2026/02/image-4-copy.jpg?resize=800%2C800&ssl=1" alt="Kashmir winter tale">
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-category">Escapes</span>
+        <h2 class="post-card-title">Between the peaks: a Kashmiri winter tale</h2>
+        <time class="post-card-date">March 5, 2026</time>
+      </div>
+    </article>
+
+    <!-- Post 2: Montreal -->
+    <article class="post-card">
+      <div class="post-card-image">
+        <img src="https://i0.wp.com/eskestudio.blog/wp-content/uploads/2025/11/c18c31cc-1aec-41ff-9810-c1827114308e-e1762321612232.jpeg?resize=800%2C800&ssl=1" alt="Montreal fall weekend">
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-category">Escapes</span>
+        <h2 class="post-card-title">2 days in Montreal: a fall weekend itinerary</h2>
+        <time class="post-card-date">November 9, 2025</time>
+      </div>
+    </article>
+
+    <!-- Post 3: Victoria -->
+    <article class="post-card">
+      <div class="post-card-image">
+        <img src="https://i0.wp.com/eskestudio.blog/wp-content/uploads/2025/10/51af7ec8-e156-4994-afc9-9cd4eedc20aa_1_105_c-1-e1759372927826.jpeg?resize=800%2C800&ssl=1" alt="Victoria BC guide">
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-category">Escapes</span>
+        <h2 class="post-card-title">8 favourite places in Victoria to eat, drink, shop, and stay</h2>
+        <time class="post-card-date">October 12, 2025</time>
+      </div>
+    </article>
+
+    <!-- Post 4: Bali -->
+    <article class="post-card">
+      <div class="post-card-image">
+        <img src="https://i0.wp.com/eskestudio.blog/wp-content/uploads/2025/09/4a10b46f-05cb-4b40-a710-805c58bfbb42-e1758754526978.jpeg?resize=800%2C800&ssl=1" alt="Bali family trip">
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-category">Escapes</span>
+        <h2 class="post-card-title">Beautiful moments from my first visit to Bali with family</h2>
+        <time class="post-card-date">September 28, 2025</time>
+      </div>
+    </article>
+
+    <!-- Post 5: Hanoi -->
+    <article class="post-card">
+      <div class="post-card-image">
+        <img src="https://i0.wp.com/eskestudio.blog/wp-content/uploads/2025/08/img_9015-e1755956524225.jpg?resize=800%2C800&ssl=1" alt="Hanoi Old Quarter">
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-category">Escapes</span>
+        <h2 class="post-card-title">Hanoi Old Quarter with food, lanterns, and timeless streets</h2>
+        <time class="post-card-date">August 26, 2025</time>
+      </div>
+    </article>
+
+    <!-- Post 6: Taiwan -->
+    <article class="post-card">
+      <div class="post-card-image">
+        <img src="https://i0.wp.com/eskestudio.blog/wp-content/uploads/2025/08/23-536c60cc-4165-4df8-9f85-c6fa0ef287a4_1_102_o-e1754710402108.jpg?resize=800%2C800&ssl=1" alt="Taiwan mountain escape">
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-category">Escapes</span>
+        <h2 class="post-card-title">A mountain escape and city nights in Taiwan</h2>
+        <time class="post-card-date">August 14, 2025</time>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- LOAD MORE -->
+  <div class="load-more-wrapper">
+    <button class="load-more-btn">Load more</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">&copy; 2026 eske studio</div>
+      <ul class="footer-links">
+        <li><a href="/about">about & contact</a></li>
+        <li><a href="https://etsy.com/shop/EskeStudioCo" target="_blank" rel="noopener">shop</a></li>
+        <li><a href="https://instagram.com" target="_blank" rel="noopener">instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- SCROLL-TRIGGERED ANIMATIONS -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    document.querySelectorAll('.post-card, .section-header').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
