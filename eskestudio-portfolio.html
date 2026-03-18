@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>portfolio — eske studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================
+       CSS VARIABLES — same as homepage for consistency
+       ============================================= */
+    :root {
+      --color-bg: #FAFAF7;
+      --color-text: #1A1A1A;
+      --color-text-light: #6B6B6B;
+      --color-accent: #C4510A;
+      --color-border: #E8E5DF;
+      --color-card-bg: #FFFFFF;
+      --color-tag-bg: #F0EDE8;
+
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --max-width: 1200px;
+    }
+
+    /* =============================================
+       RESET & BASE
+       ============================================= */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* =============================================
+       NAVIGATION — identical to homepage
+       ============================================= */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--color-text-light);
+      letter-spacing: 0.02em;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-text);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+      background: var(--color-accent);
+    }
+
+    /* =============================================
+       PORTFOLIO HERO
+       More assertive than the homepage hero.
+       This page is for recruiters — they need to
+       immediately understand: this is a portfolio.
+       Short intro text establishes who you are
+       and what kind of work you do.
+       ============================================= */
+    .portfolio-hero {
+      padding: 128px 32px 56px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .portfolio-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .portfolio-hero-desc {
+      font-size: 1.05rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 620px;
+    }
+
+    .portfolio-hero-divider {
+      width: 48px;
+      height: 1px;
+      background: var(--color-accent);
+      margin-top: 32px;
+    }
+
+    /* =============================================
+       PROJECT LIST
+       
+       Unlike the homepage's equal-width grid, the
+       portfolio uses alternating large project cards.
+       Each card is a horizontal layout: image left,
+       text right (flips on alternating cards).
+       
+       This gives each project more breathing room
+       and feels more like a case study preview than
+       a blog feed. Inspired by the agency sites
+       (Takt, Pound & Grain) where work is showcased
+       one project at a time with generous space.
+       ============================================= */
+    .project-list {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 32px 40px;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--color-border);
+      cursor: pointer;
+    }
+
+    .project-card:first-child {
+      padding-top: 0;
+    }
+
+    .project-card:last-child {
+      border-bottom: none;
+    }
+
+    /* 
+      ALTERNATING LAYOUT: every other card flips
+      the image to the right side. This creates visual
+      rhythm and keeps the page from feeling monotonous.
+      
+      The 'order' property in CSS Grid controls which
+      column an element appears in, regardless of the
+      HTML source order.
+    */
+    .project-card:nth-child(even) .project-image {
+      order: 2;
+    }
+
+    .project-card:nth-child(even) .project-info {
+      order: 1;
+    }
+
+    /* PROJECT IMAGE */
+    .project-image {
+      aspect-ratio: 4 / 3;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--color-tag-bg);
+      position: relative;
+    }
+
+    .project-image img {
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .project-card:hover .project-image img {
+      transform: scale(1.04);
+    }
+
+    /* Subtle overlay on hover */
+    .project-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 26, 26, 0.06);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .project-card:hover .project-image::after {
+      opacity: 1;
+    }
+
+    /* PROJECT INFO */
+    .project-info {
+      padding: 8px 0;
+    }
+
+    .project-number {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+      line-height: 1.3;
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .project-card:hover .project-title {
+      color: var(--color-accent);
+    }
+
+    .project-role {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      margin-bottom: 16px;
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    /* VIEW PROJECT LINK */
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      transition: gap 0.3s ease, color 0.3s ease;
+    }
+
+    .project-card:hover .project-link {
+      color: var(--color-accent);
+      gap: 12px; /* arrow slides right on hover */
+    }
+
+    .project-link-arrow {
+      transition: transform 0.3s ease;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .project-card:hover .project-link-arrow {
+      transform: translateX(2px);
+    }
+
+    /* =============================================
+       COMING SOON SECTION
+       Placeholder for future Product Care work.
+       Gives the portfolio page a sense of growth
+       and signals to recruiters there's more to come.
+       ============================================= */
+    .coming-soon {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+      text-align: center;
+    }
+
+    .coming-soon-inner {
+      padding: 48px 32px;
+      border: 1px dashed var(--color-border);
+      border-radius: 8px;
+    }
+
+    .coming-soon-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+
+    .coming-soon-text {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--color-text-light);
+    }
+
+    /* =============================================
+       FOOTER — same as homepage
+       ============================================= */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      padding: 40px 32px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-text);
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 900px) {
+      .project-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      /* Reset alternating order on mobile — image always on top */
+      .project-card:nth-child(even) .project-image {
+        order: 0;
+      }
+
+      .project-card:nth-child(even) .project-info {
+        order: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .portfolio-hero {
+        padding: 108px 20px 44px;
+      }
+
+      .project-list {
+        padding: 0 20px 40px;
+      }
+
+      .project-card {
+        gap: 20px;
+        padding: 32px 0;
+      }
+
+      .nav-inner {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+
+      .nav-links a {
+        font-size: 0.78rem;
+      }
+
+      .coming-soon {
+        padding: 32px 20px 60px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    /* =============================================
+       ANIMATIONS
+       ============================================= */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .portfolio-hero-title {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.1s forwards;
+    }
+
+    .portfolio-hero-desc {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+
+    .portfolio-hero-divider {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+
+    /* Scroll-triggered project cards */
+    .project-card {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .project-card.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .coming-soon {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .coming-soon.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">eske studio</a>
+      <ul class="nav-links">
+        <li><a href="/portfolio" class="active">portfolio</a></li>
+        <li><a href="/category/vancouver">vancouver</a></li>
+        <li><a href="/category/escapes">escapes</a></li>
+        <li><a href="/category/journal">journal</a></li>
+        <li><a href="/about">about</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================================= 
+       PORTFOLIO HERO
+       More direct than the homepage. This is where
+       a recruiter lands — they need to know immediately
+       what you do and what they're looking at.
+       ============================================= -->
+  <section class="portfolio-hero">
+    <h1 class="portfolio-hero-title">Selected work</h1>
+    <p class="portfolio-hero-desc">
+      Marketing, design, and content strategy projects across brand identity, 
+      social campaigns, SEO-driven content, and corporate communications.
+    </p>
+    <div class="portfolio-hero-divider"></div>
+  </section>
+
+  <!-- ============================================= 
+       PROJECT LIST
+       Each project gets a generous horizontal card.
+       Image and text alternate sides for visual rhythm.
+       
+       NOTE: When rebuilding these as case studies
+       inside eskestudio.blog, each "view project" link
+       would go to a WordPress page (not an external URL).
+       ============================================= -->
+  <div class="project-list">
+
+    <!-- PROJECT 1: Lymphoma Campaign -->
+    <article class="project-card">
+      <div class="project-image">
+        <img src="https://cdn.myportfolio.com/078e399b-5596-4048-a346-c77509940101/dc2ed0fa-a6d5-4fee-af91-baad6b34f74f_rwc_0x209x1920x1501x32.png?h=afda1569d6fa84559d9264900daa112b" alt="Lymphoma Awareness Campaign">
+      </div>
+      <div class="project-info">
+        <div class="project-number">01</div>
+        <h2 class="project-title">Lymphoma awareness campaign</h2>
+        <p class="project-role">Strategy, SEO, social media, content — Artron Laboratories</p>
+        <p class="project-desc">
+          Identified World Lymphoma Awareness Day as a strategic window, 
+          built an SEO-driven blog and 4-week LinkedIn content calendar, 
+          and launched a newsletter that gained 400+ subscribers in week one. 
+          Results: 34.7% increase in page views, 50% increase in clicks, 
+          47.5% follower growth.
+        </p>
+        <a href="/portfolio/lymphoma-campaign" class="project-link">
+          View project <span class="project-link-arrow">&rarr;</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- PROJECT 2: Shibui Concept -->
+    <article class="project-card">
+      <div class="project-image">
+        <img src="https://cdn.myportfolio.com/078e399b-5596-4048-a346-c77509940101/6c584b3e-6d5e-48d9-9eb3-a629d79a99fd_carw_202x158x32.jpg?h=1dcb28c39005090c08aff87fb5ab497f" alt="Shibui Concept brand identity">
+      </div>
+      <div class="project-info">
+        <div class="project-number">02</div>
+        <h2 class="project-title">Shibui Concept 渋井</h2>
+        <p class="project-role">Brand identity, packaging, menu design — freelance</p>
+        <p class="project-desc">
+          Designed bottle labels and a double-sided menu for a minimalist 
+          Vietnamese coffee and vinyl shop in Saigon. Worked remotely 
+          with the founders to translate Japanese-inspired aesthetics 
+          into a cohesive brand identity for a startup on a lean budget.
+        </p>
+        <a href="/portfolio/shibui-concept" class="project-link">
+          View project <span class="project-link-arrow">&rarr;</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- PROJECT 3: KhaiAn Rebranding -->
+    <article class="project-card">
+      <div class="project-image">
+        <img src="https://cdn.myportfolio.com/078e399b-5596-4048-a346-c77509940101/5c687672-c3a3-4b67-8f24-2f22e8be5870_carw_202x158x32.jpg?h=39907bce899abdc81ff00bf54a56647a" alt="KhaiAn rebranding">
+      </div>
+      <div class="project-info">
+        <div class="project-number">03</div>
+        <h2 class="project-title">KhaiAn rebranding</h2>
+        <p class="project-role">Logo design, brand identity, marketing collateral — freelance</p>
+        <p class="project-desc">
+          Led a complete logo redesign and brand refresh for a Vietnamese 
+          logistics company. Developed multiple concept directions from 
+          initial sketches through to final deliverables including business 
+          cards, letterheads, and vehicle branding.
+        </p>
+        <a href="/portfolio/khaian-rebranding" class="project-link">
+          View project <span class="project-link-arrow">&rarr;</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- PROJECT 4: Artron Company Profile -->
+    <article class="project-card">
+      <div class="project-image">
+        <img src="https://cdn.myportfolio.com/078e399b-5596-4048-a346-c77509940101/ec822414-c797-491b-a276-d85785361f03_rwc_87x0x3837x3000x32.jpg?h=93f0e66947dbafea9330f87bf9f5f15d" alt="Artron company profile">
+      </div>
+      <div class="project-info">
+        <div class="project-number">04</div>
+        <h2 class="project-title">Artron company profile</h2>
+        <p class="project-role">Corporate design, InDesign — Artron Laboratories</p>
+        <p class="project-desc">
+          Redesigned a dated B2B company profile into a modern, 
+          magazine-style brochure. Researched competitor materials, 
+          restructured content to reduce text density, and introduced 
+          infographic elements to communicate complex product lines clearly.
+        </p>
+        <a href="/portfolio/artron-profile" class="project-link">
+          View project <span class="project-link-arrow">&rarr;</span>
+        </a>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ============================================= 
+       COMING SOON
+       Signals to recruiters that more work is on the way.
+       Replace this with actual project cards once
+       Product Care samples are ready.
+       ============================================= -->
+  <div class="coming-soon">
+    <div class="coming-soon-inner">
+      <p class="coming-soon-label">More work coming soon</p>
+      <p class="coming-soon-text">Social strategy, SEO content, member communications, and brand design</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">&copy; 2026 eske studio</div>
+      <ul class="footer-links">
+        <li><a href="/about">about & contact</a></li>
+        <li><a href="https://etsy.com/shop/EskeStudioCo" target="_blank" rel="noopener">shop</a></li>
+        <li><a href="https://instagram.com" target="_blank" rel="noopener">instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- SCROLL-TRIGGERED ANIMATIONS -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    document.querySelectorAll('.project-card, .coming-soon').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
